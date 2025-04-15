@@ -92,13 +92,6 @@ interface SearchParams {
 class AmadeusService {
   private baseUrl: string = "/api";
 
-  constructor() {
-    // Fallback to localhost if we're in development
-    if (import.meta.env.DEV) {
-      this.baseUrl = "http://localhost:5000/api";
-    }
-  }
-
   public async searchFlights(params: SearchParams): Promise<FlightOffer[]> {
     try {
       const response = await axios.post(

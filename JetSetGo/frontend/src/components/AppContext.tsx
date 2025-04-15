@@ -27,18 +27,6 @@ interface AppContextType {
   ) => void;
   selectedFlight: FlightOffer | null;
   setSelectedFlight: (flight: FlightOffer | null) => void;
-  selectedDestination: {
-    code: string;
-    name: string;
-    country: string;
-  } | null;
-  setSelectedDestination: (
-    destination: {
-      code: string;
-      name: string;
-      country: string;
-    } | null,
-  ) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -57,11 +45,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [selectedFlight, setSelectedFlight] = useState<FlightOffer | null>(
     null,
   );
-  const [selectedDestination, setSelectedDestination] = useState<{
-    code: string;
-    name: string;
-    country: string;
-  } | null>(null);
 
   return (
     <AppContext.Provider
@@ -74,8 +57,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setSearchCriteria,
         selectedFlight,
         setSelectedFlight,
-        selectedDestination,
-        setSelectedDestination,
       }}
     >
       {children}
@@ -83,11 +64,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Export as a named constant instead of a function to fix Fast Refresh compatibility
-export const useAppContext = () => {
+export function useAppContext() {
   const context = useContext(AppContext);
   if (context === undefined) {
     throw new Error("useAppContext must be used within an AppProvider");
   }
   return context;
-};
+}

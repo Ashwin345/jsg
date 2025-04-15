@@ -10,46 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { setSearchCriteria, setSelectedDestination } = useAppContext();
-  const handleExploreDestination = (destination: {
-    name: string;
-    country: string;
-    price: number;
-    image: string;
-  }) => {
-    // Find the airport code for the destination
-    const destinationAirport = popularDestinations.find(
-      (d) => d.name === destination.name,
-    );
-
-    if (destinationAirport) {
-      // Set the selected destination in context
-      setSelectedDestination({
-        code: getAirportCodeByName(destination.name),
-        name: destination.name,
-        country: destination.country,
-      });
-
-      // Navigate to search page
-      navigate("/search");
-    }
-  };
-
-  // Helper function to get airport code by name
-  const getAirportCodeByName = (name: string): string => {
-    // This is a simplified mapping - in a real app, you'd have a more comprehensive database
-    const airportMap: Record<string, string> = {
-      "New York": "JFK",
-      Paris: "CDG",
-      Tokyo: "NRT",
-      Bali: "DPS",
-      London: "LHR",
-      Sydney: "SYD",
-    };
-
-    return airportMap[name] || "";
-  };
-
+  const { setSearchCriteria } = useAppContext();
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Navigation Header */}
@@ -226,7 +187,6 @@ const Home = () => {
                     size="sm"
                     variant="outline"
                     className="flex items-center gap-1"
-                    onClick={() => handleExploreDestination(destination)}
                   >
                     <Search size={14} />
                     Explore

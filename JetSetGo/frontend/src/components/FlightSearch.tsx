@@ -34,13 +34,10 @@ const FlightSearch = ({
   onSearch = () => {},
   isLoading: propIsLoading,
 }: FlightSearchProps) => {
-  const { isLoading, setIsLoading, setSearchCriteria, selectedDestination } =
-    useAppContext();
+  const { isLoading, setIsLoading, setSearchCriteria } = useAppContext();
   const [tripType, setTripType] = useState("round-trip");
   const [origin, setOrigin] = useState("ICN"); // Default to Seoul (Korean Air hub)
-  const [destination, setDestination] = useState(
-    selectedDestination?.code || "LAX",
-  );
+  const [destination, setDestination] = useState("LAX");
   const [date, setDate] = useState<DateRange | undefined>({
     from: addDays(new Date(), 1),
     to: tripType === "one-way" ? undefined : addDays(new Date(), 8),
@@ -54,13 +51,6 @@ const FlightSearch = ({
       setDate({ from: date.from, to: addDays(date.from, 7) });
     }
   }, [tripType, date]);
-
-  // Update destination when selectedDestination changes
-  useEffect(() => {
-    if (selectedDestination?.code) {
-      setDestination(selectedDestination.code);
-    }
-  }, [selectedDestination]);
   const [passengers, setPassengers] = useState(1);
   const [travelClass, setTravelClass] = useState("ECONOMY");
 
@@ -108,18 +98,6 @@ const FlightSearch = ({
     // In a real implementation, we would call the API here
     // and update the search results in context
   };
-
-  // Auto-trigger search if coming from a destination selection
-  useEffect(() => {
-    if (selectedDestination && destination === selectedDestination.code) {
-      // Small delay to ensure UI is ready
-      const timer = setTimeout(() => {
-        handleSearch();
-      }, 500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [selectedDestination, destination]);
 
   return (
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl border-t-4 border-t-blue-600">
