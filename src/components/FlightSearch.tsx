@@ -122,196 +122,197 @@ const FlightSearch = ({
   }, [selectedDestination, destination]);
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-xl border-t-4 border-t-blue-600">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-6 border-b pb-4">
-          <div className="flex items-center">
-            <Plane className="h-6 w-6 text-blue-600 mr-2" />
-            <h2 className="text-xl font-bold text-blue-600">
-              JetSetGO Flight Search
-            </h2>
-          </div>
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <span>Best Prices</span>
-            <span>•</span>
-            <span>Global Flights</span>
-          </div>
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <Plane className="h-5 w-5 text-blue-600 mr-2" />
+          <h2 className="text-lg font-bold text-blue-600">
+            JetSetGO Flight Search
+          </h2>
         </div>
+        <div className="flex items-center space-x-2 text-sm text-gray-500">
+          <span>Best Prices</span>
+          <span>•</span>
+          <span>Global Flights</span>
+        </div>
+      </div>
 
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="flex-1">
-              <RadioGroup
-                defaultValue="round-trip"
-                value={tripType}
-                onValueChange={setTripType}
-                className="flex space-x-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    value="round-trip"
-                    id="round-trip"
-                    className="text-blue-600"
-                  />
-                  <Label htmlFor="round-trip" className="font-medium">
-                    Round Trip
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    value="one-way"
-                    id="one-way"
-                    className="text-blue-600"
-                  />
-                  <Label htmlFor="one-way" className="font-medium">
-                    One Way
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            <div className="flex items-center space-x-4">
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div className="flex-1">
+            <RadioGroup
+              defaultValue="round-trip"
+              value={tripType}
+              onValueChange={setTripType}
+              className="flex space-x-4"
+            >
               <div className="flex items-center space-x-2">
-                <Users className="h-4 w-4 text-blue-600" />
-                <Label htmlFor="passengers" className="font-medium">
-                  Passengers:
+                <RadioGroupItem
+                  value="round-trip"
+                  id="round-trip"
+                  className="text-blue-600"
+                />
+                <Label htmlFor="round-trip" className="font-medium">
+                  Round Trip
                 </Label>
-                <Input
-                  id="passengers"
-                  type="number"
-                  min="1"
-                  max="10"
-                  value={passengers}
-                  onChange={(e) => setPassengers(parseInt(e.target.value) || 1)}
-                  className="w-16 border-blue-600 focus:ring-blue-600"
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value="one-way"
+                  id="one-way"
+                  className="text-blue-600"
                 />
+                <Label htmlFor="one-way" className="font-medium">
+                  One Way
+                </Label>
               </div>
-
-              <div>
-                <select
-                  value={travelClass}
-                  onChange={(e) => setTravelClass(e.target.value)}
-                  className="p-2 border rounded-md text-sm bg-background border-blue-600 focus:ring-blue-600"
-                >
-                  <option value="ECONOMY">Economy</option>
-                  <option value="PREMIUM_ECONOMY">Premium Economy</option>
-                  <option value="BUSINESS">Prestige (Business)</option>
-                  <option value="FIRST">First</option>
-                </select>
-              </div>
-            </div>
+            </RadioGroup>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="origin" className="font-medium text-blue-600">
-                From
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Users className="h-4 w-4 text-blue-600" />
+              <Label htmlFor="passengers" className="font-medium">
+                Passengers:
               </Label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-blue-600" />
-                <select
-                  id="origin"
-                  value={origin}
-                  onChange={(e) => setOrigin(e.target.value)}
-                  className="w-full p-2 pl-10 border rounded-md border-blue-600 focus:ring-blue-600"
-                >
-                  {popularDestinations.map((airport) => (
-                    <option key={airport.code} value={airport.code}>
-                      {airport.name} ({airport.code})
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <Input
+                id="passengers"
+                type="number"
+                min="1"
+                max="10"
+                value={passengers}
+                onChange={(e) => setPassengers(parseInt(e.target.value) || 1)}
+                className="w-16 border-blue-600 focus:ring-blue-600"
+              />
             </div>
 
-            <div className="space-y-2">
-              <Label
-                htmlFor="destination"
-                className="font-medium text-blue-600"
+            <div>
+              <select
+                value={travelClass}
+                onChange={(e) => setTravelClass(e.target.value)}
+                className="p-2 border rounded-md text-sm bg-background border-blue-600 focus:ring-blue-600"
               >
-                To
-              </Label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-blue-600" />
-                <select
-                  id="destination"
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  className="w-full p-2 pl-10 border rounded-md border-blue-600 focus:ring-blue-600"
-                >
-                  {popularDestinations.map((airport) => (
-                    <option key={airport.code} value={airport.code}>
-                      {airport.name} ({airport.code})
-                    </option>
-                  ))}
-                </select>
-              </div>
+                <option value="ECONOMY">Economy</option>
+                <option value="PREMIUM_ECONOMY">Premium Economy</option>
+                <option value="BUSINESS">Prestige (Business)</option>
+                <option value="FIRST">First</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-100">
+            <Label
+              htmlFor="origin"
+              className="font-medium text-blue-600 flex items-center"
+            >
+              <MapPin className="h-4 w-4 mr-1 text-blue-600" />
+              From
+            </Label>
+            <div className="relative">
+              <select
+                id="origin"
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value)}
+                className="w-full p-2 border rounded-md bg-white border-blue-200 focus:ring-blue-600 focus:border-blue-400"
+              >
+                {popularDestinations.map((airport) => (
+                  <option key={airport.code} value={airport.code}>
+                    {airport.name} ({airport.code})
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label className="font-medium text-blue-600">Dates</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal border-blue-600 focus:ring-blue-600"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 text-blue-600" />
-                  {date?.from ? (
-                    tripType === "one-way" ? (
-                      format(date.from, "MMM dd, yyyy")
-                    ) : date.to ? (
-                      <>
-                        {format(date.from, "MMM dd, yyyy")} -{" "}
-                        {format(date.to, "MMM dd, yyyy")}
-                      </>
-                    ) : (
-                      format(date.from, "MMM dd, yyyy")
-                    )
-                  ) : (
-                    <span>
-                      {tripType === "one-way"
-                        ? "Select date"
-                        : "Select date range"}
-                    </span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  initialFocus
-                  mode={tripType === "one-way" ? "single" : "range"}
-                  defaultMonth={date?.from}
-                  selected={date}
-                  onSelect={setDate}
-                  numberOfMonths={2}
-                  disabled={(date) =>
-                    date < new Date(new Date().setHours(0, 0, 0, 0))
-                  }
-                  className="rounded-md"
-                />
-              </PopoverContent>
-            </Popover>
+          <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-100">
+            <Label
+              htmlFor="destination"
+              className="font-medium text-blue-600 flex items-center"
+            >
+              <MapPin className="h-4 w-4 mr-1 text-blue-600" />
+              To
+            </Label>
+            <div className="relative">
+              <select
+                id="destination"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="w-full p-2 border rounded-md bg-white border-blue-200 focus:ring-blue-600 focus:border-blue-400"
+              >
+                {popularDestinations.map((airport) => (
+                  <option key={airport.code} value={airport.code}>
+                    {airport.name} ({airport.code})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-
-          <Button
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md transition-colors font-medium text-lg"
-            onClick={handleSearch}
-            disabled={isLoading || propIsLoading}
-          >
-            {isLoading || propIsLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                Searching...
-              </div>
-            ) : (
-              "Search Flights"
-            )}
-          </Button>
         </div>
-      </CardContent>
-    </Card>
+
+        <div className="space-y-2">
+          <Label className="font-medium text-blue-600">Dates</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-normal border-blue-600 focus:ring-blue-600"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4 text-blue-600" />
+                {date?.from ? (
+                  tripType === "one-way" ? (
+                    format(date.from, "MMM dd, yyyy")
+                  ) : date.to ? (
+                    <>
+                      {format(date.from, "MMM dd, yyyy")} -{" "}
+                      {format(date.to, "MMM dd, yyyy")}
+                    </>
+                  ) : (
+                    format(date.from, "MMM dd, yyyy")
+                  )
+                ) : (
+                  <span>
+                    {tripType === "one-way"
+                      ? "Select date"
+                      : "Select date range"}
+                  </span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                initialFocus
+                mode={tripType === "one-way" ? "single" : "range"}
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={setDate}
+                numberOfMonths={2}
+                disabled={(date) =>
+                  date < new Date(new Date().setHours(0, 0, 0, 0))
+                }
+                className="rounded-md"
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <Button
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md transition-colors font-medium text-lg"
+          onClick={handleSearch}
+          disabled={isLoading || propIsLoading}
+        >
+          {isLoading || propIsLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+              Searching...
+            </div>
+          ) : (
+            "Search Flights"
+          )}
+        </Button>
+      </div>
+    </div>
   );
 };
 

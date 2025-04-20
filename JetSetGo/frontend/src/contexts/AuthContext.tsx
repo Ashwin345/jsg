@@ -11,6 +11,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  role?: string;
 }
 
 interface AuthContextType {
@@ -20,6 +21,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  isAdmin: () => boolean;
+  isEditor: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,11 +45,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Check if user is already logged in
-    const currentUser = authService.getCurrentUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
-    setIsLoading(false);
+    const checkAuthStatus = async () => {
+      setIsLoading(true);
+      try {
+        const currentUser = authService.getCurrentUser();
+        if (currentUser) {
+          setUser(currentUser);
+        }
+      } catch (error) {
+        console.error("Auth status check error:", error);
+        // If token is invalid, clear local storage
+        authService.logout();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -80,6 +95,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
   };
 
+  const isAdmin = () => {
+    return user?.role === "admin";
+  };
+
+  const isEditor = () => {
+    return user?.role === "editor" || user?.role === "admin";
+  };
+
   const value = {
     user,
     isAuthenticated: !!user,
@@ -87,6 +110,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     logout,
+    isAdmin,
+    isEditor,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

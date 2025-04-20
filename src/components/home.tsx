@@ -149,7 +149,7 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section with Boarding Pass Design */}
       <section className="container mx-auto px-4 py-12 md:py-24">
         <div className="text-center mb-12">
           <motion.h2
@@ -171,19 +171,58 @@ const Home = () => {
           </motion.p>
         </div>
 
-        {/* Flight Search Component */}
+        {/* Flight Search Component with Boarding Pass Design */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="max-w-5xl mx-auto"
+          className="max-w-5xl mx-auto relative"
         >
-          <FlightSearch
-            onSearch={(searchData) => {
-              setSearchCriteria(searchData);
-              navigate("/search");
-            }}
-          />
+          {/* Boarding pass tear line - top */}
+          <div className="absolute top-0 left-0 w-full flex justify-between items-center">
+            <div className="h-4 w-4 rounded-full bg-background -mt-2 -ml-2 z-10"></div>
+            <div className="border-t border-dashed border-gray-300 flex-grow mx-2"></div>
+            <div className="h-4 w-4 rounded-full bg-background -mt-2 -mr-2 z-10"></div>
+          </div>
+
+          {/* Boarding pass header */}
+          <div className="pt-6 pb-2 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-xl">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-bold">JetSetGO</h3>
+                <p className="text-xs opacity-80">Your journey begins here</p>
+              </div>
+              <Plane className="h-8 w-8 transform rotate-45" />
+            </div>
+          </div>
+
+          <div className="bg-white p-6 shadow-xl rounded-b-xl">
+            <FlightSearch
+              onSearch={(searchData) => {
+                setSearchCriteria(searchData);
+                navigate("/search");
+              }}
+            />
+          </div>
+
+          {/* Boarding pass tear line - bottom */}
+          <div className="relative">
+            <div className="absolute bottom-0 left-0 w-full flex justify-between items-center">
+              <div className="h-4 w-4 rounded-full bg-background -mb-2 -ml-2 z-10"></div>
+              <div className="border-t border-dashed border-gray-300 flex-grow mx-2"></div>
+              <div className="h-4 w-4 rounded-full bg-background -mb-2 -mr-2 z-10"></div>
+            </div>
+          </div>
+
+          {/* Boarding pass footer */}
+          <div className="text-center text-xs text-gray-500 pt-4 pb-2">
+            <p>
+              Boarding Pass ID: JSG-
+              {Math.floor(Math.random() * 10000)
+                .toString()
+                .padStart(4, "0")}
+            </p>
+          </div>
         </motion.div>
       </section>
 

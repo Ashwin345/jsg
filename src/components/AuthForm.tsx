@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { User, LogIn, UserPlus } from "lucide-react";
+import { User, LogIn, UserPlus, Plane, PlaneTakeoff } from "lucide-react";
 
 interface AuthFormProps {
   onSuccess?: () => void;
@@ -115,10 +115,27 @@ const AuthForm: React.FC<AuthFormProps> = ({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl text-center">
-          Welcome to JetSetGO
+    <Card className="w-full max-w-md mx-auto bg-white relative overflow-hidden border-0 shadow-lg">
+      {/* Boarding pass tear line */}
+      <div className="absolute top-0 left-0 w-full flex justify-between items-center">
+        <div className="h-4 w-4 rounded-full bg-background -mt-2 -ml-2 z-10"></div>
+        <div className="border-t border-dashed border-gray-300 flex-grow mx-2"></div>
+        <div className="h-4 w-4 rounded-full bg-background -mt-2 -mr-2 z-10"></div>
+      </div>
+
+      <div className="pt-6 pb-2 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-xl font-bold">JetSetGO</h3>
+            <p className="text-xs opacity-80">Your journey begins here</p>
+          </div>
+          <Plane className="h-8 w-8 transform rotate-45" />
+        </div>
+      </div>
+
+      <CardHeader className="pt-4 pb-0">
+        <CardTitle className="text-2xl text-center text-gray-800">
+          Welcome Aboard
         </CardTitle>
         <CardDescription className="text-center">
           Sign in to your account or create a new one
@@ -126,7 +143,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       </CardHeader>
       <CardContent>
         <Tabs defaultValue={defaultTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-2 bg-gray-100">
             <TabsTrigger value="login" className="flex items-center gap-2">
               <LogIn className="h-4 w-4" />
               Login
@@ -140,7 +157,9 @@ const AuthForm: React.FC<AuthFormProps> = ({
           <TabsContent value="login">
             <form onSubmit={handleLogin} className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-700 font-medium">
+                  Passenger Email
+                </Label>
                 <Input
                   id="email"
                   name="email"
@@ -149,11 +168,17 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   required
                   value={loginData.email}
                   onChange={handleLoginChange}
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
+                  <Label
+                    htmlFor="password"
+                    className="text-gray-700 font-medium"
+                  >
+                    Security Code
+                  </Label>
                   <a href="#" className="text-sm text-blue-600 hover:underline">
                     Forgot password?
                   </a>
@@ -166,10 +191,16 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   required
                   value={loginData.password}
                   onChange={handleLoginChange}
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign In"}
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+                disabled={isLoading}
+              >
+                {isLoading ? "Boarding..." : "Board Now"}
+                {!isLoading && <PlaneTakeoff className="h-4 w-4" />}
               </Button>
             </form>
           </TabsContent>
@@ -177,7 +208,9 @@ const AuthForm: React.FC<AuthFormProps> = ({
           <TabsContent value="register">
             <form onSubmit={handleRegister} className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name" className="text-gray-700 font-medium">
+                  Passenger Name
+                </Label>
                 <Input
                   id="name"
                   name="name"
@@ -185,10 +218,16 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   required
                   value={registerData.name}
                   onChange={handleRegisterChange}
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="register-email">Email</Label>
+                <Label
+                  htmlFor="register-email"
+                  className="text-gray-700 font-medium"
+                >
+                  Email Address
+                </Label>
                 <Input
                   id="register-email"
                   name="email"
@@ -197,10 +236,16 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   required
                   value={registerData.email}
                   onChange={handleRegisterChange}
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="register-password">Password</Label>
+                <Label
+                  htmlFor="register-password"
+                  className="text-gray-700 font-medium"
+                >
+                  Create Security Code
+                </Label>
                 <Input
                   id="register-password"
                   name="password"
@@ -209,10 +254,16 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   required
                   value={registerData.password}
                   onChange={handleRegisterChange}
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <Label
+                  htmlFor="confirm-password"
+                  className="text-gray-700 font-medium"
+                >
+                  Confirm Security Code
+                </Label>
                 <Input
                   id="confirm-password"
                   name="confirmPassword"
@@ -221,18 +272,43 @@ const AuthForm: React.FC<AuthFormProps> = ({
                   required
                   value={registerData.confirmPassword}
                   onChange={handleRegisterChange}
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating Account..." : "Create Account"}
+              <Button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+                disabled={isLoading}
+              >
+                {isLoading ? "Preparing Ticket..." : "Reserve Your Seat"}
+                {!isLoading && <PlaneTakeoff className="h-4 w-4" />}
               </Button>
             </form>
           </TabsContent>
         </Tabs>
       </CardContent>
-      <CardFooter className="flex justify-center text-sm text-gray-500">
-        By continuing, you agree to JetSetGO's Terms of Service and Privacy
-        Policy
+      {/* Bottom tear line */}
+      <div className="relative">
+        <div className="absolute bottom-0 left-0 w-full flex justify-between items-center">
+          <div className="h-4 w-4 rounded-full bg-background -mb-2 -ml-2 z-10"></div>
+          <div className="border-t border-dashed border-gray-300 flex-grow mx-2"></div>
+          <div className="h-4 w-4 rounded-full bg-background -mb-2 -mr-2 z-10"></div>
+        </div>
+      </div>
+
+      <CardFooter className="flex justify-center text-xs text-gray-500 pt-2 pb-6">
+        <div className="text-center">
+          <p>
+            Boarding Pass ID: JSG-
+            {Math.floor(Math.random() * 10000)
+              .toString()
+              .padStart(4, "0")}
+          </p>
+          <p className="mt-1">
+            By continuing, you agree to JetSetGO's Terms of Service and Privacy
+            Policy
+          </p>
+        </div>
       </CardFooter>
     </Card>
   );

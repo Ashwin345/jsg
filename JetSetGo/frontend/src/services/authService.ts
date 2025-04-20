@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface RegisterData {
   name: string;
@@ -16,16 +16,57 @@ interface AuthResponse {
     id: string;
     name: string;
     email: string;
+    role?: string;
   };
   token: string;
 }
 
+// Use relative URL for development, will be handled by proxy in production
 const API_URL = "/api";
+
+// Create axios instance with default config
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// Add interceptor to add auth token to requests
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+// Add response interceptor to handle token expiration
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid, clear local storage
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("userProfile");
+
+      // Redirect to login page if not already there
+      if (window.location.pathname !== "/auth") {
+        window.location.href = "/auth";
+      }
+    }
+    return Promise.reject(error);
+  },
+);
 
 export const authService = {
   register: async (userData: RegisterData): Promise<AuthResponse> => {
     try {
-      const response = await axios.post(`${API_URL}/auth/register`, userData);
+      const response = await apiClient.post("/auth/register", userData);
 
       // Store the token in localStorage
       localStorage.setItem("jwtToken", response.data.token);
@@ -40,7 +81,7 @@ export const authService = {
 
   login: async (credentials: LoginData): Promise<AuthResponse> => {
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, credentials);
+      const response = await apiClient.post("/auth/login", credentials);
 
       // Store the token in localStorage
       localStorage.setItem("jwtToken", response.data.token);
@@ -57,6 +98,13 @@ export const authService = {
     // Remove the token from localStorage
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("userProfile"); // Also clear profile data
+
+    // Optional: Call logout endpoint to invalidate token on server
+    apiClient.post("/auth/logout").catch((err) => {
+      console.error("Logout error:", err);
+      // Continue even if server logout fails
+    });
   },
 
   getCurrentUser: () => {
@@ -70,4 +118,7 @@ export const authService = {
   isAuthenticated: () => {
     return localStorage.getItem("jwtToken") !== null;
   },
+
+  // Get the API client with auth headers
+  getApiClient: () => apiClient,
 };

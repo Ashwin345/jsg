@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { User, LogIn, UserPlus } from "lucide-react";
+import { User, LogIn, UserPlus, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface AuthFormProps {
   onSuccess?: () => void;
@@ -37,20 +38,27 @@ const AuthForm: React.FC<AuthFormProps> = ({
     password: "",
     confirmPassword: "",
   });
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [registerError, setRegisterError] = useState<string | null>(null);
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing again
+    if (loginError) setLoginError(null);
   };
 
   const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegisterData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing again
+    if (registerError) setRegisterError(null);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setLoginError(null);
 
     try {
       await login(loginData.email, loginData.password);
@@ -63,10 +71,14 @@ const AuthForm: React.FC<AuthFormProps> = ({
       } else {
         navigate("/");
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Please check your credentials and try again.";
+      setLoginError(errorMessage);
       toast({
         title: "Login Failed",
-        description: "Please check your credentials and try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -76,11 +88,23 @@ const AuthForm: React.FC<AuthFormProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setRegisterError(null);
 
     if (registerData.password !== registerData.confirmPassword) {
+      setRegisterError("Passwords do not match. Please try again.");
       toast({
         title: "Password Mismatch",
         description: "Passwords do not match. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (registerData.password.length < 6) {
+      setRegisterError("Password must be at least 6 characters long.");
+      toast({
+        title: "Invalid Password",
+        description: "Password must be at least 6 characters long.",
         variant: "destructive",
       });
       return;
@@ -103,10 +127,14 @@ const AuthForm: React.FC<AuthFormProps> = ({
       } else {
         navigate("/");
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Please check your information and try again.";
+      setRegisterError(errorMessage);
       toast({
         title: "Registration Failed",
-        description: "Please check your information and try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -139,6 +167,12 @@ const AuthForm: React.FC<AuthFormProps> = ({
 
           <TabsContent value="login">
             <form onSubmit={handleLogin} className="space-y-4 mt-4">
+              {loginError && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{loginError}</AlertDescription>
+                </Alert>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -176,6 +210,12 @@ const AuthForm: React.FC<AuthFormProps> = ({
 
           <TabsContent value="register">
             <form onSubmit={handleRegister} className="space-y-4 mt-4">
+              {registerError && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{registerError}</AlertDescription>
+                </Alert>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <Input

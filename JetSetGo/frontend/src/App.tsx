@@ -13,6 +13,8 @@ const AuthPage = lazy(() => import("./pages/AuthPage"));
 const UserDashboardPage = lazy(() => import("./pages/UserDashboardPage"));
 const FeedbackPage = lazy(() => import("./pages/FeedbackPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const AdminCmsPage = lazy(() => import("./pages/AdminCmsPage"));
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
             <Route path="/dashboard" element={<UserDashboardPage />} />
             <Route path="/feedback" element={<FeedbackPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/admin/cms" element={<AdminCmsPage />} />
           </Routes>
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
           <Toaster />
