@@ -202,20 +202,23 @@ const FlightSearch = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-100">
+          <div className="space-y-2 bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 shadow-sm transition-all hover:shadow-md">
             <Label
               htmlFor="origin"
-              className="font-medium text-blue-600 flex items-center"
+              className="font-semibold text-blue-700 flex items-center text-sm uppercase tracking-wide"
             >
-              <MapPin className="h-4 w-4 mr-1 text-blue-600" />
-              From
+              <MapPin className="h-4 w-4 mr-2 text-blue-600" />
+              Departure City
             </Label>
             <div className="relative">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <div className="w-2 h-2 rounded-full bg-blue-500 mr-1"></div>
+              </div>
               <select
                 id="origin"
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
-                className="w-full p-2 border rounded-md bg-white border-blue-200 focus:ring-blue-600 focus:border-blue-400"
+                className="w-full p-3 pl-8 border rounded-lg bg-white border-blue-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 shadow-sm text-gray-800 font-medium transition-all hover:border-blue-400"
               >
                 {popularDestinations.map((airport) => (
                   <option key={airport.code} value={airport.code}>
@@ -226,20 +229,23 @@ const FlightSearch = ({
             </div>
           </div>
 
-          <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-100">
+          <div className="space-y-2 bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 shadow-sm transition-all hover:shadow-md">
             <Label
               htmlFor="destination"
-              className="font-medium text-blue-600 flex items-center"
+              className="font-semibold text-blue-700 flex items-center text-sm uppercase tracking-wide"
             >
-              <MapPin className="h-4 w-4 mr-1 text-blue-600" />
-              To
+              <MapPin className="h-4 w-4 mr-2 text-blue-600" />
+              Arrival City
             </Label>
             <div className="relative">
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <div className="w-2 h-2 rounded-full bg-blue-500 mr-1"></div>
+              </div>
               <select
                 id="destination"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="w-full p-2 border rounded-md bg-white border-blue-200 focus:ring-blue-600 focus:border-blue-400"
+                className="w-full p-3 pl-8 border rounded-lg bg-white border-blue-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-400 shadow-sm text-gray-800 font-medium transition-all hover:border-blue-400"
               >
                 {popularDestinations.map((airport) => (
                   <option key={airport.code} value={airport.code}>

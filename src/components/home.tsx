@@ -60,20 +60,32 @@ const Home = () => {
         </div>
         <nav className="hidden md:flex items-center space-x-6">
           <a
-            href="#"
+            href="/"
             className="text-gray-600 hover:text-blue-600 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/");
+            }}
           >
             Home
           </a>
           <a
-            href="#"
+            href="/search"
             className="text-gray-600 hover:text-blue-600 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/search");
+            }}
           >
             Flights
           </a>
           <a
-            href="#"
+            href="/dashboard"
             className="text-gray-600 hover:text-blue-600 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/dashboard");
+            }}
           >
             Bookings
           </a>
